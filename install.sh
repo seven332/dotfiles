@@ -10,6 +10,6 @@ fi
 
 # Install Claude Code globally
 echo "Installing Claude Code..."
-npm install -g @anthropic-ai/claude-code
+sudo npm install -g @anthropic-ai/claude-code
 
 echo "Setup complete!"
