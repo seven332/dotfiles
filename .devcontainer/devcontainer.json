@@ -3,9 +3,7 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "features": {
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
-  },
+  "postCreateCommand": "bash /home/vscode/dotfiles/install.sh",
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly",
     "source=.,target=/home/vscode/dotfiles,type=bind,readonly"
