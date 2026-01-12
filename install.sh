@@ -36,8 +36,9 @@ if ! command -v pnpm &> /dev/null; then
 fi
 
 # Setup pnpm global bin directory
+export SHELL=$(which zsh)
 pnpm setup
-source ~/.bashrc 2>/dev/null || true
+source ~/.zshrc 2>/dev/null || true
 
 # Install Claude Code globally
 echo "Installing Claude Code..."
