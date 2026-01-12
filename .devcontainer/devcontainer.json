@@ -1,0 +1,10 @@
+{
+  "name": "My Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly",
+    "source=.,target=/home/vscode/dotfiles,type=bind,readonly"
+  ]
+}
