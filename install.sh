@@ -8,8 +8,16 @@ if ! command -v node &> /dev/null; then
     sudo apt-get install -y nodejs
 fi
 
+# Install pnpm if not already installed
+if ! command -v pnpm &> /dev/null; then
+    echo "Installing pnpm..."
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
+    export PNPM_HOME="$HOME/.local/share/pnpm"
+    export PATH="$PNPM_HOME:$PATH"
+fi
+
 # Install Claude Code globally
 echo "Installing Claude Code..."
-sudo npm install -g @anthropic-ai/claude-code
+pnpm add -g @anthropic-ai/claude-code
 
 echo "Setup complete!"
