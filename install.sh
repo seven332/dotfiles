@@ -14,6 +14,10 @@ if ! command -v pnpm &> /dev/null; then
     curl -fsSL https://get.pnpm.io/install.sh | sh -
     export PNPM_HOME="$HOME/.local/share/pnpm"
     export PATH="$PNPM_HOME:$PATH"
+
+    # Setup pnpm global bin directory
+    pnpm setup
+    source ~/.bashrc 2>/dev/null || true
 fi
 
 # Install Claude Code globally
