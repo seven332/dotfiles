@@ -1,6 +1,25 @@
 #!/bin/bash
 set -e
 
+# Install zsh if not already installed
+if ! command -v zsh &> /dev/null; then
+    echo "Installing zsh..."
+    sudo apt-get update
+    sudo apt-get install -y zsh
+fi
+
+# Install Oh My Zsh if not already installed
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# Set zsh as default shell
+if [ "$SHELL" != "$(which zsh)" ]; then
+    echo "Setting zsh as default shell..."
+    sudo chsh -s $(which zsh) $USER
+fi
+
 # Install Node.js if not already installed
 if ! command -v node &> /dev/null; then
     echo "Installing Node.js..."
