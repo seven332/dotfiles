@@ -20,6 +20,14 @@ if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 fi
 
+# Set Powerlevel10k as the theme in .zshrc
+if [ -f "$HOME/.zshrc" ]; then
+    if ! grep -q 'ZSH_THEME="powerlevel10k/powerlevel10k"' "$HOME/.zshrc"; then
+        echo "Setting Powerlevel10k as zsh theme..."
+        sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "$HOME/.zshrc"
+    fi
+fi
+
 # Set zsh as default shell
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Setting zsh as default shell..."
