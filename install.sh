@@ -32,6 +32,15 @@ fi
 if [ -f "/home/vscode/dotfiles/.p10k.zsh" ]; then
     echo "Copying Powerlevel10k configuration..."
     cp /home/vscode/dotfiles/.p10k.zsh "$HOME/.p10k.zsh"
+
+    # Add p10k config loading to .zshrc if not already present
+    if [ -f "$HOME/.zshrc" ]; then
+        if ! grep -q 'source ~/.p10k.zsh' "$HOME/.zshrc"; then
+            echo "" >> "$HOME/.zshrc"
+            echo "# To customize prompt, run \`p10k configure\` or edit ~/.p10k.zsh." >> "$HOME/.zshrc"
+            echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> "$HOME/.zshrc"
+        fi
+    fi
 fi
 
 # Set zsh as default shell
