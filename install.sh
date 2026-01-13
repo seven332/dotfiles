@@ -28,6 +28,12 @@ if [ -f "$HOME/.zshrc" ]; then
     fi
 fi
 
+# Copy p10k configuration
+if [ -f "/home/vscode/dotfiles/.p10k.zsh" ]; then
+    echo "Copying Powerlevel10k configuration..."
+    cp /home/vscode/dotfiles/.p10k.zsh "$HOME/.p10k.zsh"
+fi
+
 # Set zsh as default shell
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Setting zsh as default shell..."
