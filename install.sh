@@ -43,21 +43,14 @@ if [ -f "/home/vscode/dotfiles/.p10k.zsh" ]; then
     fi
 fi
 
-# Configure SSH/Git authentication
+# Configure SSH agent forwarding
 if [ -f "$HOME/.zshrc" ]; then
-    if ! grep -q 'SSH/Git authentication' "$HOME/.zshrc"; then
+    if ! grep -q 'SSH agent forwarding' "$HOME/.zshrc"; then
         echo "" >> "$HOME/.zshrc"
-        echo "# SSH/Git authentication" >> "$HOME/.zshrc"
-        echo '# If SSH keys are mounted, use ssh-agent' >> "$HOME/.zshrc"
-        echo 'if [ -d "$HOME/.ssh" ] && [ -n "$(ls -A $HOME/.ssh/id_* 2>/dev/null)" ]; then' >> "$HOME/.zshrc"
-        echo '    if [ -z "$SSH_AUTH_SOCK" ]; then' >> "$HOME/.zshrc"
-        echo '        eval "$(ssh-agent -s)" > /dev/null' >> "$HOME/.zshrc"
-        echo '        ssh-add ~/.ssh/id_* 2>/dev/null' >> "$HOME/.zshrc"
-        echo '    fi' >> "$HOME/.zshrc"
-        echo '# Otherwise, rely on GitHub CLI for git operations' >> "$HOME/.zshrc"
-        echo 'elif command -v gh &> /dev/null; then' >> "$HOME/.zshrc"
-        echo '    # GitHub CLI will handle git authentication via gh auth setup-git' >> "$HOME/.zshrc"
-        echo '    true' >> "$HOME/.zshrc"
+        echo "# SSH agent forwarding" >> "$HOME/.zshrc"
+        echo 'if [ -z "$SSH_AUTH_SOCK" ]; then' >> "$HOME/.zshrc"
+        echo '    eval "$(ssh-agent -s)" > /dev/null' >> "$HOME/.zshrc"
+        echo '    ssh-add ~/.ssh/id_* 2>/dev/null' >> "$HOME/.zshrc"
         echo 'fi' >> "$HOME/.zshrc"
     fi
 fi
