@@ -43,6 +43,18 @@ if [ -f "/home/vscode/dotfiles/.p10k.zsh" ]; then
     fi
 fi
 
+# Configure SSH agent forwarding
+if [ -f "$HOME/.zshrc" ]; then
+    if ! grep -q 'SSH agent forwarding' "$HOME/.zshrc"; then
+        echo "" >> "$HOME/.zshrc"
+        echo "# SSH agent forwarding" >> "$HOME/.zshrc"
+        echo 'if [ -z "$SSH_AUTH_SOCK" ]; then' >> "$HOME/.zshrc"
+        echo '    eval "$(ssh-agent -s)" > /dev/null' >> "$HOME/.zshrc"
+        echo '    ssh-add ~/.ssh/id_* 2>/dev/null' >> "$HOME/.zshrc"
+        echo 'fi' >> "$HOME/.zshrc"
+    fi
+fi
+
 # Set zsh as default shell
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Setting zsh as default shell..."
