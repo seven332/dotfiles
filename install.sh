@@ -61,6 +61,25 @@ if [ "$SHELL" != "$(which zsh)" ]; then
     sudo chsh -s $(which zsh) $USER
 fi
 
+# Install Go if not already installed
+if ! command -v go &> /dev/null; then
+    echo "Installing Go..."
+    sudo apt-get install -y golang-go
+fi
+
+# Add Go bin to PATH
+if [ -f "$HOME/.zshrc" ]; then
+    if ! grep -q 'export PATH=.*\$HOME/go/bin' "$HOME/.zshrc"; then
+        echo 'export PATH="$HOME/go/bin:$PATH"' >> "$HOME/.zshrc"
+    fi
+fi
+
+# Install Axiom CLI
+if ! command -v axiom &> /dev/null; then
+    echo "Installing Axiom CLI..."
+    go install github.com/axiomhq/cli/cmd/axiom@latest
+fi
+
 # Install Node.js if not already installed
 if ! command -v node &> /dev/null; then
     echo "Installing Node.js..."
