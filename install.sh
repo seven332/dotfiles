@@ -71,7 +71,8 @@ if ! command -v go &> /dev/null; then
     rm "${GO_VERSION}.linux-amd64.tar.gz"
 fi
 
-# Add Go to PATH
+# Add Go to PATH for current script and persist to .zshrc
+export PATH="/usr/local/go/bin:$HOME/go/bin:$PATH"
 if [ -f "$HOME/.zshrc" ]; then
     if ! grep -q '/usr/local/go/bin' "$HOME/.zshrc"; then
         echo 'export PATH="/usr/local/go/bin:$HOME/go/bin:$PATH"' >> "$HOME/.zshrc"
