@@ -64,13 +64,17 @@ fi
 # Install Go if not already installed
 if ! command -v go &> /dev/null; then
     echo "Installing Go..."
-    sudo apt-get install -y golang-go
+    GO_VERSION=$(curl -sL https://go.dev/VERSION?m=text | head -1)
+    wget -q "https://go.dev/dl/${GO_VERSION}.linux-amd64.tar.gz"
+    sudo rm -rf /usr/local/go
+    sudo tar -C /usr/local -xzf "${GO_VERSION}.linux-amd64.tar.gz"
+    rm "${GO_VERSION}.linux-amd64.tar.gz"
 fi
 
-# Add Go bin to PATH
+# Add Go to PATH
 if [ -f "$HOME/.zshrc" ]; then
-    if ! grep -q 'export PATH=.*\$HOME/go/bin' "$HOME/.zshrc"; then
-        echo 'export PATH="$HOME/go/bin:$PATH"' >> "$HOME/.zshrc"
+    if ! grep -q '/usr/local/go/bin' "$HOME/.zshrc"; then
+        echo 'export PATH="/usr/local/go/bin:$HOME/go/bin:$PATH"' >> "$HOME/.zshrc"
     fi
 fi
 
