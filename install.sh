@@ -65,10 +65,16 @@ fi
 if ! command -v go &> /dev/null; then
     echo "Installing Go..."
     GO_VERSION=$(curl -sL https://go.dev/VERSION?m=text | head -1)
-    wget -q "https://go.dev/dl/${GO_VERSION}.linux-amd64.tar.gz"
+    ARCH=$(uname -m)
+    case $ARCH in
+        x86_64) GO_ARCH="amd64" ;;
+        aarch64|arm64) GO_ARCH="arm64" ;;
+        *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
+    esac
+    wget -q "https://go.dev/dl/${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
     sudo rm -rf /usr/local/go
-    sudo tar -C /usr/local -xzf "${GO_VERSION}.linux-amd64.tar.gz"
-    rm "${GO_VERSION}.linux-amd64.tar.gz"
+    sudo tar -C /usr/local -xzf "${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
+    rm "${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
 fi
 
 # Add Go to PATH for current script and persist to .zshrc
