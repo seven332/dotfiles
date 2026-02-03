@@ -123,6 +123,11 @@ if ! command -v claude &> /dev/null; then
       bash
 fi
 
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+# Add local bin to PATH
+if [ -f "$HOME/.zshrc" ]; then
+    if ! grep -q '$HOME/.local/bin' "$HOME/.zshrc"; then
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc"
+    fi
+fi
 
 echo "Setup complete!"
