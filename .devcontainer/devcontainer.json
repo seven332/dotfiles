@@ -4,6 +4,13 @@
     "dockerfile": "Dockerfile"
   },
   "postCreateCommand": "bash /home/vscode/dotfiles/install.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "tamasfe.even-better-toml"
+      ]
+    }
+  },
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly",
     "source=.,target=/home/vscode/dotfiles,type=bind,readonly"
