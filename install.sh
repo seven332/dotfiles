@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+# Set timezone from host (passed via --remote-env TZ=...)
+if [ -n "${TZ:-}" ]; then
+    echo "Setting timezone to $TZ..."
+    sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+    echo "$TZ" | sudo tee /etc/timezone > /dev/null
+fi
+
 # Install zsh if not already installed
 if ! command -v zsh &> /dev/null; then
     echo "Installing zsh..."
