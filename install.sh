@@ -8,12 +8,10 @@ if [ -n "${TZ:-}" ]; then
     echo "$TZ" | sudo tee /etc/timezone > /dev/null
 fi
 
-# Install zsh if not already installed
-if ! command -v zsh &> /dev/null; then
-    echo "Installing zsh..."
-    sudo apt-get update
-    sudo apt-get install -y zsh
-fi
+# Install essential packages
+echo "Installing essential packages..."
+sudo apt-get update
+sudo apt-get install -y zsh make gcc g++ htop
 
 # Install Oh My Zsh if not already installed
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -122,6 +120,12 @@ source ~/.zshrc 2>/dev/null || true
 if ! command -v claude &> /dev/null; then
     echo "Installing Claude Code..."
     curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+# Install Codeman
+if ! command -v codeman &> /dev/null; then
+    echo "Installing Codeman..."
+    curl -fsSL https://raw.githubusercontent.com/Ark0N/Codeman/master/install.sh | bash
 fi
 
 # Add local bin to PATH
