@@ -139,8 +139,8 @@ fi
 # Start Codeman and expose via Cloudflare Tunnel
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-if [ -z "${CODEMAN_PASSWORD:-}" ] || [ -z "${CF_TUNNEL_API_TOKEN:-}" ] || [ -z "${CF_TUNNEL_ACCOUNT_ID:-}" ] || [ -z "${CODEMAN_TUNNEL_NAME:-}" ]; then
-    echo "ERROR: CODEMAN_PASSWORD, CF_TUNNEL_API_TOKEN, CF_TUNNEL_ACCOUNT_ID, and CODEMAN_TUNNEL_NAME must all be set" >&2
+if [ -z "${CODEMAN_PASSWORD:-}" ] || [ -z "${CF_TUNNEL_API_TOKEN:-}" ] || [ -z "${CF_TUNNEL_ACCOUNT_ID:-}" ] || [ -z "${CF_TUNNEL_DOMAIN:-}" ] || [ -z "${CODEMAN_TUNNEL_NAME:-}" ]; then
+    echo "ERROR: CODEMAN_PASSWORD, CF_TUNNEL_API_TOKEN, CF_TUNNEL_ACCOUNT_ID, CF_TUNNEL_DOMAIN, and CODEMAN_TUNNEL_NAME must all be set" >&2
     exit 1
 fi
 

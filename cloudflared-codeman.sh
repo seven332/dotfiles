@@ -7,6 +7,7 @@
 # Required environment variables (passed via --remote-env from dcu):
 #   CF_TUNNEL_API_TOKEN   — API token with Account:Cloudflare Tunnel:Edit + Zone:DNS:Edit + Zone:Zone:Read
 #   CF_TUNNEL_ACCOUNT_ID  — Cloudflare account ID
+#   CF_TUNNEL_DOMAIN      — Domain name (e.g. vm7.ai)
 #
 # Usage:
 #   cloudflared-codeman.sh provision [name] [--domain vm7.ai] [--port 3000]
@@ -25,7 +26,6 @@
 
 set -euo pipefail
 
-DEFAULT_DOMAIN="vm7.ai"
 DEFAULT_PORT="3000"
 
 log() { echo -e "\033[1;34m[cloudflared-codeman]\033[0m $1" >&2; }
@@ -33,7 +33,7 @@ err() { echo -e "\033[1;31m[cloudflared-codeman]\033[0m $1" >&2; }
 
 # --- Validate required environment variables ---
 require_env() {
-  for var in CF_TUNNEL_API_TOKEN CF_TUNNEL_ACCOUNT_ID; do
+  for var in CF_TUNNEL_API_TOKEN CF_TUNNEL_ACCOUNT_ID CF_TUNNEL_DOMAIN; do
     if [[ -z "${!var:-}" ]]; then
       err "Required env var ${var} is not set"
       exit 1
@@ -100,7 +100,7 @@ parse_name() {
 # Provision
 # ==========================================
 do_provision() {
-  local name="" domain="$DEFAULT_DOMAIN" port="$DEFAULT_PORT"
+  local name="" domain="$CF_TUNNEL_DOMAIN" port="$DEFAULT_PORT"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -177,7 +177,7 @@ do_provision() {
 # Run
 # ==========================================
 do_run() {
-  local name="" domain="$DEFAULT_DOMAIN"
+  local name="" domain="$CF_TUNNEL_DOMAIN"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -213,7 +213,7 @@ do_run() {
 # Token (print token for external use)
 # ==========================================
 do_token() {
-  local name="" domain="$DEFAULT_DOMAIN"
+  local name="" domain="$CF_TUNNEL_DOMAIN"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -241,7 +241,7 @@ do_token() {
 # Deprovision
 # ==========================================
 do_deprovision() {
-  local name="" domain="$DEFAULT_DOMAIN"
+  local name="" domain="$CF_TUNNEL_DOMAIN"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
