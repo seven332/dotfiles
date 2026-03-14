@@ -125,7 +125,7 @@ fi
 # Install Codeman
 if ! command -v codeman &> /dev/null; then
     echo "Installing Codeman..."
-    curl -fsSL https://raw.githubusercontent.com/Ark0N/Codeman/master/install.sh | bash
+    CODEMAN_NONINTERACTIVE=1 CODEMAN_SKIP_SYSTEMD=1 CODEMAN_NO_AUTOSTART=1 bash <(curl -fsSL https://raw.githubusercontent.com/Ark0N/Codeman/master/install.sh)
 fi
 
 # Add local bin to PATH
