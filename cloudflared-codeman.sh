@@ -141,7 +141,7 @@ do_provision() {
   log "Configuring ingress: ${TUNNEL_FQDN} -> http://localhost:${port}"
   local config_resp
   config_resp=$(cf_api PUT "/accounts/${CF_TUNNEL_ACCOUNT_ID}/cfd_tunnel/${tunnel_id}/configurations" \
-    "{\"config\":{\"ingress\":[{\"hostname\":\"${TUNNEL_FQDN}\",\"service\":\"http://localhost:${port}\"},{\"service\":\"http_status:404\"}]}}")
+    "{\"config\":{\"ingress\":[{\"hostname\":\"${TUNNEL_FQDN}\",\"service\":\"http://localhost:${port}\",\"originRequest\":{\"disableChunkedEncoding\":true}},{\"service\":\"http_status:404\"}]}}")
   if [[ "$(echo "$config_resp" | jq -r '.success')" != "true" ]]; then
     err "Failed to configure ingress: $(echo "$config_resp" | jq -r '.errors')"
     exit 1
@@ -206,7 +206,7 @@ do_run() {
   fi
 
   log "Starting tunnel: https://${TUNNEL_FQDN}"
-  exec cloudflared tunnel run --token "$tunnel_token"
+  exec cloudflared tunnel --protocol http2 run --token "$tunnel_token"
 }
 
 # ==========================================
