@@ -125,7 +125,7 @@ fi
 # Install claude-remote-approver
 if ! command -v claude-remote-approver &> /dev/null; then
     echo "Installing claude-remote-approver..."
-    pnpm add -g claude-remote-approver
+    pnpm add -g "github:seven332/claude-remote-approver#feat/dismiss-notification-after-response"
 fi
 
 # Configure claude-remote-approver
