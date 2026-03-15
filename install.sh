@@ -128,6 +128,15 @@ if ! command -v claude-remote-approver &> /dev/null; then
     pnpm add -g claude-remote-approver
 fi
 
+# Configure claude-remote-approver
+if [ -n "${CRA_TOPIC:-}" ]; then
+    echo "Configuring claude-remote-approver..."
+    echo "n" | claude-remote-approver setup
+    jq --arg topic "$CRA_TOPIC" '.topic = $topic' "$HOME/.claude-remote-approver.json" > /tmp/cra-config.json \
+        && mv /tmp/cra-config.json "$HOME/.claude-remote-approver.json"
+    chmod 600 "$HOME/.claude-remote-approver.json"
+fi
+
 # Add local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
 if [ -f "$HOME/.zshrc" ]; then
