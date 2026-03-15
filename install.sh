@@ -11,7 +11,7 @@ fi
 # Install essential packages
 echo "Installing essential packages..."
 sudo apt-get update
-sudo apt-get install -y zsh make htop jq
+sudo apt-get install -y zsh make htop jq expect
 
 # Install Oh My Zsh if not already installed
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -131,7 +131,7 @@ fi
 # Configure claude-remote-approver
 if [ -n "${CRA_TOPIC:-}" ]; then
     echo "Configuring claude-remote-approver..."
-    echo "n" | claude-remote-approver setup
+    expect -c 'spawn claude-remote-approver setup; expect "(y/n)"; send "n\r"; expect eof'
     jq --arg topic "$CRA_TOPIC" '.topic = $topic' "$HOME/.claude-remote-approver.json" > /tmp/cra-config.json \
         && mv /tmp/cra-config.json "$HOME/.claude-remote-approver.json"
     chmod 600 "$HOME/.claude-remote-approver.json"
