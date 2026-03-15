@@ -11,7 +11,7 @@ fi
 # Install essential packages
 echo "Installing essential packages..."
 sudo apt-get update
-sudo apt-get install -y zsh make gcc g++ htop jq
+sudo apt-get install -y zsh make htop jq
 
 # Install Oh My Zsh if not already installed
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -122,48 +122,18 @@ if ! command -v claude &> /dev/null; then
     curl -fsSL https://claude.ai/install.sh | bash
 fi
 
-# Install Codeman
-if ! command -v codeman &> /dev/null; then
-    echo "Installing Codeman..."
-    CODEMAN_NONINTERACTIVE=1 CODEMAN_SKIP_SYSTEMD=1 CODEMAN_NO_AUTOSTART=1 bash <(curl -fsSL https://raw.githubusercontent.com/Ark0N/Codeman/master/install.sh)
+# Install claude-remote-approver
+if ! command -v claude-remote-approver &> /dev/null; then
+    echo "Installing claude-remote-approver..."
+    pnpm add -g claude-remote-approver
 fi
 
 # Add local bin to PATH
-export PATH="$HOME/.local/bin:$HOME/.codeman/app/node_modules/.bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 if [ -f "$HOME/.zshrc" ]; then
     if ! grep -q '$HOME/.local/bin' "$HOME/.zshrc"; then
         echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc"
     fi
 fi
-
-# Start Codeman and expose via Cloudflare Tunnel
-DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
-
-if [ -z "${CODEMAN_PASSWORD:-}" ] || [ -z "${CF_TUNNEL_API_TOKEN:-}" ] || [ -z "${CF_TUNNEL_ACCOUNT_ID:-}" ] || [ -z "${CF_TUNNEL_DOMAIN:-}" ] || [ -z "${CODEMAN_TUNNEL_NAME:-}" ]; then
-    echo "ERROR: CODEMAN_PASSWORD, CF_TUNNEL_API_TOKEN, CF_TUNNEL_ACCOUNT_ID, CF_TUNNEL_DOMAIN, and CODEMAN_TUNNEL_NAME must all be set" >&2
-    exit 1
-fi
-
-echo "Starting Codeman web server..."
-CODEMAN_PASSWORD="$CODEMAN_PASSWORD" codeman web > /tmp/codeman.log 2>&1 &
-
-echo "Waiting for Codeman to start..."
-for i in $(seq 1 30); do
-    if curl -s -o /dev/null http://localhost:3000 2>&1; then
-        echo "Codeman is running"
-        break
-    fi
-    if [ "$i" -eq 30 ]; then
-        echo "ERROR: Codeman failed to start, check /tmp/codeman.log" >&2
-        exit 1
-    fi
-    sleep 1
-done
-
-echo "Provisioning Cloudflare Tunnel..."
-bash "$DOTFILES_DIR/cloudflared-codeman.sh" provision "$CODEMAN_TUNNEL_NAME"
-
-echo "Starting Cloudflare Tunnel..."
-bash "$DOTFILES_DIR/cloudflared-codeman.sh" run "$CODEMAN_TUNNEL_NAME" > /tmp/cloudflared.log 2>&1 &
 
 echo "Setup complete!"
