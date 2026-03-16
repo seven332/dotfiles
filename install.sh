@@ -132,7 +132,8 @@ fi
 if [ -n "${CRA_TOPIC:-}" ]; then
     echo "Configuring claude-remote-approver..."
     expect -c 'spawn claude-remote-approver setup; expect "(y/n)"; send "n\r"; expect eof'
-    jq --arg topic "$CRA_TOPIC" '.topic = $topic' "$HOME/.claude-remote-approver.json" > /tmp/cra-config.json \
+    jq --arg topic "$CRA_TOPIC" --arg server "${CRA_NTFY_SERVER:-https://ntfy.sh}" \
+        '.topic = $topic | .ntfyServer = $server' "$HOME/.claude-remote-approver.json" > /tmp/cra-config.json \
         && mv /tmp/cra-config.json "$HOME/.claude-remote-approver.json"
     chmod 600 "$HOME/.claude-remote-approver.json"
 fi
