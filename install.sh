@@ -146,4 +146,14 @@ if [ -f "$HOME/.zshrc" ]; then
     fi
 fi
 
+# Persist PERSIST_* env vars to .zshrc
+if [ -f "$HOME/.zshrc" ]; then
+    env | grep '^PERSIST_' | while IFS='=' read -r key value; do
+        real_key="${key#PERSIST_}"
+        if ! grep -q "export ${real_key}=" "$HOME/.zshrc"; then
+            echo "export ${real_key}='${value}'" >> "$HOME/.zshrc"
+        fi
+    done
+fi
+
 echo "Setup complete!"
