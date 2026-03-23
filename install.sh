@@ -141,7 +141,7 @@ fi
 # Add local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
 if [ -f "$HOME/.zshrc" ]; then
-    if ! grep -q '$HOME/.local/bin' "$HOME/.zshrc"; then
+    if ! grep -q '^export PATH=.*\$HOME/.local/bin' "$HOME/.zshrc"; then
         echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc"
     fi
 fi
