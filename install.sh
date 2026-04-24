@@ -122,6 +122,12 @@ if ! command -v claude &> /dev/null; then
     curl -fsSL https://claude.ai/install.sh | bash
 fi
 
+# Install Codex
+if ! command -v codex &> /dev/null; then
+    echo "Installing Codex..."
+    pnpm add -g @openai/codex
+fi
+
 # Install claude-remote-approver
 if ! command -v claude-remote-approver &> /dev/null; then
     echo "Installing claude-remote-approver..."
