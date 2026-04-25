@@ -130,7 +130,7 @@ fi
 
 # Mirror Claude skills/commands into Codex layout for the workspace project
 codex_claude_compat_init() {
-    local repo_root="$PWD"
+    local repo_root="${WORKSPACE_FOLDER:-$PWD}"
 
     rm -rf "$repo_root/.codex"
     mkdir -pv "$repo_root/.codex"
