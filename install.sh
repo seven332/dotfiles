@@ -125,7 +125,7 @@ fi
 # Install Codex
 if ! command -v codex &> /dev/null; then
     echo "Installing Codex..."
-    pnpm add -g @openai/codex
+    curl -fsSL https://github.com/openai/codex/releases/latest/download/install.sh | sh
 fi
 
 # Mirror Claude skills/commands into Codex layout for the workspace project
