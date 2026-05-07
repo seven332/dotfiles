@@ -128,6 +128,20 @@ if ! command -v codex &> /dev/null; then
     curl -fsSL https://github.com/openai/codex/releases/latest/download/install.sh | sh
 fi
 
+# Install codex-switch
+if ! command -v codex-switch &> /dev/null; then
+    echo "Installing codex-switch..."
+    ARCH=$(uname -m)
+    case $ARCH in
+        aarch64|arm64) CODEX_SWITCH_ASSET="codex-switch-aarch64-unknown-linux-musl" ;;
+        *) echo "Unsupported architecture for codex-switch: $ARCH"; exit 1 ;;
+    esac
+    CODEX_SWITCH_TMP=$(mktemp)
+    curl -fsSL -o "$CODEX_SWITCH_TMP" "https://github.com/seven332/codex-switch/releases/latest/download/${CODEX_SWITCH_ASSET}"
+    sudo install -m 0755 "$CODEX_SWITCH_TMP" /usr/local/bin/codex-switch
+    rm -f "$CODEX_SWITCH_TMP"
+fi
+
 # Mirror Claude commands into Codex layout for the workspace project
 codex_claude_compat_init() {
     local repo_root="${WORKSPACE_FOLDER:-$PWD}"
