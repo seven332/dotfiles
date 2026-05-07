@@ -128,24 +128,12 @@ if ! command -v codex &> /dev/null; then
     curl -fsSL https://github.com/openai/codex/releases/latest/download/install.sh | sh
 fi
 
-# Mirror Claude skills/commands into Codex layout for the workspace project
+# Mirror Claude commands into Codex layout for the workspace project
 codex_claude_compat_init() {
     local repo_root="${WORKSPACE_FOLDER:-$PWD}"
 
     rm -rf "$repo_root/.codex"
     mkdir -pv "$repo_root/.codex"
-    mkdir -pv "$HOME/.agents/skills"
-
-    if [ -d "$HOME/.config/claude/skills" ]; then
-        find "$HOME/.config/claude/skills" -mindepth 1 -maxdepth 1 -type d -exec cp -a {} "$HOME/.agents/skills/" \;
-    fi
-
-    if [ -d "$repo_root/.claude/skills" ]; then
-        rm -rf "$repo_root/.agents/skills"
-        mkdir -pv "$repo_root/.agents/skills"
-        cp -a "$repo_root/.claude/skills/." "$repo_root/.agents/skills/"
-        cp -a "$repo_root/.claude/skills" "$repo_root/.codex/"
-    fi
 
     if [ -d "$repo_root/.claude/commands" ]; then
         cp -a "$repo_root/.claude/commands" "$repo_root/.codex/"
