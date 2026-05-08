@@ -133,6 +133,7 @@ if ! command -v codex-switch &> /dev/null; then
     echo "Installing codex-switch..."
     ARCH=$(uname -m)
     case $ARCH in
+        x86_64) CODEX_SWITCH_ASSET="codex-switch-x86_64-unknown-linux-musl" ;;
         aarch64|arm64) CODEX_SWITCH_ASSET="codex-switch-aarch64-unknown-linux-musl" ;;
         *) echo "Unsupported architecture for codex-switch: $ARCH"; exit 1 ;;
     esac
