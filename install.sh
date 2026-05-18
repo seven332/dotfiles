@@ -129,7 +129,9 @@ if ! command -v codex &> /dev/null; then
 fi
 
 # Install codex-switch
-if ! command -v codex-switch &> /dev/null; then
+mkdir -p "$HOME/.local/bin"
+CODEX_SWITCH_BIN="$HOME/.local/bin/codex-switch"
+if [ ! -x "$CODEX_SWITCH_BIN" ]; then
     echo "Installing codex-switch..."
     ARCH=$(uname -m)
     case $ARCH in
@@ -139,7 +141,7 @@ if ! command -v codex-switch &> /dev/null; then
     esac
     CODEX_SWITCH_TMP=$(mktemp)
     curl -fsSL -o "$CODEX_SWITCH_TMP" "https://github.com/seven332/codex-switch/releases/latest/download/${CODEX_SWITCH_ASSET}"
-    sudo install -m 0755 "$CODEX_SWITCH_TMP" /usr/local/bin/codex-switch
+    install -m 0755 "$CODEX_SWITCH_TMP" "$CODEX_SWITCH_BIN"
     rm -f "$CODEX_SWITCH_TMP"
 fi
 
