@@ -158,22 +158,6 @@ codex_claude_compat_init() {
 }
 codex_claude_compat_init
 
-# Install claude-remote-approver
-if ! command -v claude-remote-approver &> /dev/null; then
-    echo "Installing claude-remote-approver..."
-    pnpm add -g "github:seven332/claude-remote-approver#feat/dismiss-notification-after-response"
-fi
-
-# Configure claude-remote-approver
-if [ -n "${CRA_TOPIC:-}" ]; then
-    echo "Configuring claude-remote-approver..."
-    expect -c 'spawn claude-remote-approver setup; expect "(y/n)"; send "n\r"; expect eof'
-    jq --arg topic "$CRA_TOPIC" --arg server "${CRA_NTFY_SERVER:-https://ntfy.sh}" \
-        '.topic = $topic | .ntfyServer = $server' "$HOME/.claude-remote-approver.json" > /tmp/cra-config.json \
-        && mv /tmp/cra-config.json "$HOME/.claude-remote-approver.json"
-    chmod 600 "$HOME/.claude-remote-approver.json"
-fi
-
 # Add local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
 if [ -f "$HOME/.zshrc" ]; then
