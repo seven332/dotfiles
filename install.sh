@@ -8,6 +8,55 @@ if [ -n "${TZ:-}" ]; then
     echo "$TZ" | sudo tee /etc/timezone > /dev/null
 fi
 
+# Configure Ubuntu apt sources
+configure_ubuntu_sources() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+    fi
+
+    if [ "${ID:-}" != "ubuntu" ]; then
+        return
+    fi
+
+    local apt_arch archive_uri security_uri
+    apt_arch=$(dpkg --print-architecture 2>/dev/null || uname -m)
+    case $apt_arch in
+        amd64|x86_64)
+            archive_uri="https://us.archive.ubuntu.com/ubuntu"
+            security_uri="https://security.ubuntu.com/ubuntu"
+            ;;
+        arm64|aarch64)
+            archive_uri="https://ports.ubuntu.com/ubuntu-ports"
+            security_uri="$archive_uri"
+            ;;
+        *)
+            echo "Skipping Ubuntu apt source switch for unsupported architecture: $apt_arch"
+            return
+            ;;
+    esac
+
+    local source_files=()
+    if [ -f /etc/apt/sources.list ]; then
+        source_files+=("/etc/apt/sources.list")
+    fi
+    if [ -d /etc/apt/sources.list.d ]; then
+        while IFS= read -r -d '' source_file; do
+            source_files+=("$source_file")
+        done < <(find /etc/apt/sources.list.d -type f \( -name '*.list' -o -name '*.sources' \) -print0)
+    fi
+    if [ ${#source_files[@]} -eq 0 ]; then
+        return
+    fi
+
+    echo "Configuring Ubuntu apt sources..."
+    sudo sed -i -E \
+        -e "s|https?://([^[:space:]/]+\.)?archive\.ubuntu\.com/ubuntu/?|${archive_uri}|g" \
+        -e "s|https?://security\.ubuntu\.com/ubuntu/?|${security_uri}|g" \
+        -e "s|https?://ports\.ubuntu\.com/ubuntu-ports/?|${archive_uri}|g" \
+        "${source_files[@]}"
+}
+configure_ubuntu_sources
+
 # Install essential packages
 echo "Installing essential packages..."
 sudo apt-get update
