@@ -8,8 +8,8 @@ if [ -n "${TZ:-}" ]; then
     echo "$TZ" | sudo tee /etc/timezone > /dev/null
 fi
 
-# Configure Ubuntu apt sources
-configure_ubuntu_sources() {
+# Configure apt sources
+configure_apt_sources() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
     fi
@@ -48,14 +48,15 @@ configure_ubuntu_sources() {
         return
     fi
 
-    echo "Configuring Ubuntu apt sources..."
+    echo "Configuring apt sources..."
     sudo sed -i -E \
         -e "s|https?://([^[:space:]/]+\.)?archive\.ubuntu\.com/ubuntu/?|${archive_uri}|g" \
         -e "s|https?://security\.ubuntu\.com/ubuntu/?|${security_uri}|g" \
         -e "s|https?://ports\.ubuntu\.com/ubuntu-ports/?|${archive_uri}|g" \
+        -e "s|https?://apt\.postgresql\.org/pub/repos/apt/?|https://apt.postgresql.org/pub/repos/apt|g" \
         "${source_files[@]}"
 }
-configure_ubuntu_sources
+configure_apt_sources
 
 # Install essential packages
 echo "Installing essential packages..."
